@@ -10,10 +10,12 @@ def main():
 
     while True:
         inp = main_menu()
-        if inp == QUIT:
+        if inp == M_QUIT:
             break
-        elif inp == PLAY:
+        elif inp == M_PLAY:
             play()
+        elif inp == M_RULS:
+            show_rules()
         else:
             print("Ceci n'est pas sensé arriver...")
 
@@ -23,4 +25,3 @@ def main():
 if __name__ == "__main__":
 
     main()
-

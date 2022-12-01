@@ -40,7 +40,7 @@ def get_pos(mw, mh, w, h):
     """
 
     print("> ", end='')
-    inp = input().split()
+    inp = input().split(" ")
     if len(inp) < 2:
         print("Bon vas-y, là, je veux deux entiers séparés par un espace, c'est pas compliqué !")
         return get_pos(mw, mh, w, h)
@@ -75,7 +75,3 @@ def _get_2i_from(t):
         raise err
 
     return x, y
-
-
-
-    

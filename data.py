@@ -10,6 +10,7 @@ class Box:
     C_MINE = '*'
     C_UNKN = ' '
     C_FLAG = '!'
+    C_POSS = '?'
     C_WFLA = 'x'
 
     def __init__(self):
@@ -271,48 +272,37 @@ class Grid:
 
         self._reveal(box)
 
+        # T = Top, B = Bottom, L = Left, R = Right.
         # If no adjacent mine, then we continue recursive revealing:
         if box.count == 0:
-
-            # TODO: Factorize this shit
-            # L = left ; R = right ; T = top ; B = bottom
+            # if currently going T or L
+            if oh < 0 or ow < 0:
+                self._rec_reveal_to(i, -1, -1) # going to TL
+            # if currently going T
             if oh < 0:
-                if ow < 0:    # we're at the TL
-                    self._rec_reveal_to(i, -1,  0) # going to L  of TL
-                    self._rec_reveal_to(i, -1, -1) # going to TL of TL
-                    self._rec_reveal_to(i,  0, -1) # going to T  of TL
-                elif ow == 0: # we're at the T
-                    self._rec_reveal_to(i, -1,  0) # going to L  of T
-                    self._rec_reveal_to(i,  0, -1) # going to T  of T
-                    self._rec_reveal_to(i, +1,  0) # going to R  of T
-                else: #ow > 0:  we're at the TR
-                    self._rec_reveal_to(i,  0, -1) # going to T  of TR
-                    self._rec_reveal_to(i, +1, -1) # going to TR of TR
-                    self._rec_reveal_to(i, +1,  0) # going to R  of TR
+                self._rec_reveal_to(i,  0, -1) # going to T
+            # if currently going T or R
+            if oh < 0 or ow > 0:
+                self._rec_reveal_to(i, +1, -1) # going to TR
 
-            elif oh == 0:
-                if ow < 0:    # We're at the L
-                    self._rec_reveal_to(i,  0, -1) # going to T  of L
-                    self._rec_reveal_to(i, -1,  0) # going to L  of L
-                    self._rec_reveal_to(i,  0, +1) # going to B  of L
-                elif ow > 0:  # We're at the R
-                    self._rec_reveal_to(i,  0, -1) # going to T  of R
-                    self._rec_reveal_to(i, +1,  0) # going to R  of R
-                    self._rec_reveal_to(i,  0, +1) # going to B  of R
+            # if currently going L
+            if ow < 0:
+                self._rec_reveal_to(i, -1,  0) # going to L
+            # not going again on current box
+            #   self._rec_reveal_to(i,  0,  0)
+            # if currently going R
+            if ow > 0:
+                self._rec_reveal_to(i, +1,  0) # going to R
 
-            else: # oh > 0:
-                if ow < 0:    # We're at the BL
-                    self._rec_reveal_to(i, -1,  0) # going to L  of BL
-                    self._rec_reveal_to(i, -1, +1) # going to BL of BL
-                    self._rec_reveal_to(i,  0, +1) # going to B  of BL
-                elif ow == 0: # We're at the B
-                    self._rec_reveal_to(i, -1,  0) # going to L of  B
-                    self._rec_reveal_to(i,  0, +1) # going to B of  B
-                    self._rec_reveal_to(i, +1,  0) # going to R of  B
-                else: # ow > 0: We're at the BR
-                    self._rec_reveal_to(i,  0, +1) # going to B  of BR
-                    self._rec_reveal_to(i, +1, +1) # going to BR of BR
-                    self._rec_reveal_to(i, +1,  0) # going to R  of BR
+            # if currently going B or L
+            if oh > 0 or ow < 0:
+                self._rec_reveal_to(i, -1, +1) # going to BL
+            # if currently going B
+            if oh > 0:
+                self._rec_reveal_to(i,  0, -1) # going to B
+            # if currently going B or R
+            if oh > 0 or ow > 0:
+                self._rec_reveal_to(i, +1, +1) # going to BR
 
     def _reveal(self, box):
         box.revealed = True
